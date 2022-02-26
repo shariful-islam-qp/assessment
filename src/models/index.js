@@ -1,2 +1,2 @@
 module.exports.Position = require('./position.model');
-// module.exports.User = require('./user.model');
+module.exports.Employee = require('./employee.model');

@@ -18,7 +18,7 @@ const positionSchema = Schema(
 
 /**
  * Check if email is taken
- * @param {string} email - The user's email
+ * @param {string} title - The position title
  * @param {ObjectId} [excludeTitle] - The title of the position to be excluded
  * @returns {Promise<boolean>}
  */

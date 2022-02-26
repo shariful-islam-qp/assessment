@@ -34,4 +34,15 @@ const employeeSchema = Schema(
     { timestamps: true }
 );
 
+/**
+ * Check if email is taken
+ * @param {string} email - The employee's email
+ * @param {ObjectId} [excludedEmail] - The email of an employee to be excluded
+ * @returns {Promise<boolean>}
+ */
+employeeSchema.statics.isEmailTaken = async function (email, excludedEmail) {
+    const employee = await this.findOne({ email, _id: { $ne: excludedEmail } });
+    return !!employee;
+};
+
 module.exports = mongoose.model('Employee', employeeSchema);

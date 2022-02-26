@@ -5,7 +5,7 @@ Joi.objectId = require('joi-objectid')(Joi);
 const createPosition = {
     body: Joi.object().keys({
         title: Joi.string().required(),
-        parentId: Joi.objectId()
+        parentId: Joi.objectId().optional()
     })
 };
 
