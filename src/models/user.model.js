@@ -41,8 +41,8 @@ const userSchema = Schema(
                 },
                 message: 'Passwords are not same'
             }
-        }
-        // passwordChangedAt: Date
+        },
+        passwordChangedAt: Date
     },
     { timestamps: true }
 );
@@ -82,14 +82,14 @@ userSchema.methods.isPasswordMatch = async function (password) {
 
 /* Instance method to check if password has been changed after token issued. return Boolean. return true if password has been
 changed after token issued. otherwise return false*/
-// userSchema.methods.changedPasswordAfterToken = function (jwtTimestamp) {
-//     const jwtDate = new Date(jwtTimestamp);
-//     if (this.passwordChangedAt) {
-//         const changedTimestamp = new Date(this.passwordChangedAt);
-//         return jwtDate < changedTimestamp;
-//     }
-//     return false;
-// };
+userSchema.methods.changedPasswordAfterToken = function (jwtTimestamp) {
+    const jwtDate = new Date(jwtTimestamp);
+    if (this.passwordChangedAt) {
+        const changedTimestamp = new Date(this.passwordChangedAt);
+        return jwtDate < changedTimestamp;
+    }
+    return false;
+};
 
 // post save middleware to set passwordChangedAt
 userSchema.post('save', async function (docs, next) {

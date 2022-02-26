@@ -23,4 +23,13 @@ const getUserByEmail = async email => {
     return User.findOne({ email }).select('firstName lastName email password');
 };
 
-module.exports = { createUser, getUserByEmail };
+/**
+ * Get user by id
+ * @param {ObjectId} id
+ * @returns {Promise<User>}
+ */
+const getUserById = async id => {
+    return User.findById(id).select('firstName lastName email password');
+};
+
+module.exports = { createUser, getUserByEmail, getUserById };
