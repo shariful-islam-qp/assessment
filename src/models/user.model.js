@@ -48,6 +48,17 @@ const userSchema = Schema(
     { timestamps: true }
 );
 
+/**
+ * Check if email is taken
+ * @param {string} email - The users's email
+ * @param {ObjectId} [excludedEmail] - The email of an user to be excluded
+ * @returns {Promise<boolean>}
+ */
+userSchema.statics.isEmailTaken = async function (email, excludedEmail) {
+    const user = await this.findOne({ email, _id: { $ne: excludedEmail } });
+    return !!user;
+};
+
 // Pre save middleware to encrypt password
 userSchema.pre('save', async function (next) {
     // if password not modified do nothing and return
