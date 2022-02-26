@@ -8,12 +8,12 @@ const createPosition = catchAsync(async (req, res) => {
     res.status(httpStatus.CREATED).send(position);
 });
 
-// const getUsers = catchAsync(async (req, res) => {
-//     const filter = pick(req.query, ['name', 'role']);
-//     const options = pick(req.query, ['sortBy', 'limit', 'page']);
-//     const result = await userService.queryUsers(filter, options);
-//     res.send(result);
-// });
+const getPositions = catchAsync(async (req, res) => {
+    const positions = await positionService.getAllPosition();
+    const hierarchy = await positionService.generateHierarchy(positions);
+
+    res.send(hierarchy);
+});
 
 // const getUser = catchAsync(async (req, res) => {
 //     const user = await userService.getUserById(req.params.userId);
@@ -34,8 +34,8 @@ const createPosition = catchAsync(async (req, res) => {
 // });
 
 module.exports = {
-    createPosition
-    // getUsers,
+    createPosition,
+    getPositions
     // getUser,
     // updateUser,
     // deleteUser
