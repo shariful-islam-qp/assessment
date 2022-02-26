@@ -30,8 +30,7 @@ const userSchema = Schema(
         password: {
             type: String,
             required: [true, 'A user must have a password'],
-            minlength: 8,
-            select: false
+            minlength: 8
         },
         confirmPassword: {
             type: String,
@@ -42,8 +41,8 @@ const userSchema = Schema(
                 },
                 message: 'Passwords are not same'
             }
-        },
-        passwordChangedAt: Date
+        }
+        // passwordChangedAt: Date
     },
     { timestamps: true }
 );
@@ -71,20 +70,26 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-// Instance to compare password. This function return Boolean. If both are same return true otherwise false
-userSchema.methods.comparePassword = async (password, userPassword) =>
-    await bcrypt.compare(password, userPassword);
+/**
+ * Check if password matches the user's password
+ * @param {string} password
+ * @returns {Promise<boolean>}
+ */
+userSchema.methods.isPasswordMatch = async function (password) {
+    const user = this;
+    return bcrypt.compare(password, user.password);
+};
 
 /* Instance method to check if password has been changed after token issued. return Boolean. return true if password has been
 changed after token issued. otherwise return false*/
-userSchema.methods.changedPasswordAfterToken = function (jwtTimestamp) {
-    const jwtDate = new Date(jwtTimestamp);
-    if (this.passwordChangedAt) {
-        const changedTimestamp = new Date(this.passwordChangedAt);
-        return jwtDate < changedTimestamp;
-    }
-    return false;
-};
+// userSchema.methods.changedPasswordAfterToken = function (jwtTimestamp) {
+//     const jwtDate = new Date(jwtTimestamp);
+//     if (this.passwordChangedAt) {
+//         const changedTimestamp = new Date(this.passwordChangedAt);
+//         return jwtDate < changedTimestamp;
+//     }
+//     return false;
+// };
 
 // post save middleware to set passwordChangedAt
 userSchema.post('save', async function (docs, next) {

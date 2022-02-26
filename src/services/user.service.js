@@ -14,4 +14,13 @@ const createUser = async userBody => {
     return User.create(userBody);
 };
 
-module.exports = { createUser };
+/**
+ * Get user by email
+ * @param {string} email
+ * @returns {Promise<User>}
+ */
+const getUserByEmail = async email => {
+    return User.findOne({ email }).select('firstName lastName email password');
+};
+
+module.exports = { createUser, getUserByEmail };
