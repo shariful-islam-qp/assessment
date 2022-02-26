@@ -4,6 +4,7 @@ const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors');
+const routes = require('./routes');
 // const passport = require('passport');
 // const config = require('./config/config');
 // const { jwtStrategy } = require('./config/passport');
@@ -47,6 +48,8 @@ app.use('/test', (req, res) => {
         message: 'successfully connected'
     });
 });
+
+app.use('/api', routes);
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
