@@ -1,22 +1,21 @@
 const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 const config = require('./../config/config');
 
 const setupTestDB = () => {
-    beforeAll(async () => {
-        console.log('config', config.TEST_DB_URL);
-        await mongoose.connect(config.TEST_DB_URL);
-    });
+    let connection;
+    let db;
 
-    beforeEach(async () => {
-        await Promise.all(
-            Object.values(mongoose.connection.collections).map(
-                async collection => collection.deleteMany()
-            )
-        );
+    beforeAll(async () => {
+        connection = await MongoClient.connect(config.TEST_DB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        db = await connection.db(config.__MONGO_DB_NAME__);
     });
 
     afterAll(async () => {
-        await mongoose.disconnect();
+        await connection.close();
     });
 };
 

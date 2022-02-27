@@ -1,16 +1,14 @@
-const faker = require('faker');
-const { User } = require('../../../src/models');
-const setupTestDB = require('./../../../utils/setUpTestDB');
-
-setupTestDB();
+// const faker = require('./node-modules/faker');
+const { User } = require('./../../../models');
 
 describe('User model', () => {
     describe('User validation', () => {
         let newUser;
         beforeEach(() => {
             newUser = {
-                firstName: faker.name.findName(),
-                email: faker.internet.email().toLowerCase(),
+                firstName: 'Shariful',
+                lastName: 'Islam',
+                email: 'shariful@gmail.com',
                 password: 'password1',
                 confirmPassword: 'password1'
             };
