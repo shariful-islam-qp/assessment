@@ -1,6 +1,5 @@
 const { createLogger, transports, format } = require('winston');
 const config = require('./config');
-const logPath = __dirname + './../log/app.log';
 
 const enumerateErrorFormat = format(info => {
     if (info instanceof Error) {
@@ -22,7 +21,16 @@ const logger = createLogger({
         new transports.Console({
             stderrLevels: ['silly']
         }),
-        new transports.File({ filename: logPath, level: 'info' })
+        new transports.File({
+            filename: __dirname + './../log/app.log',
+            level: 'info'
+        }),
+        new transports.File({
+            level: 'error',
+            timestamp: new Date(),
+            filename: __dirname + './../log/error.log',
+            json: true
+        })
     ]
 });
 
