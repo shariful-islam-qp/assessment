@@ -20,7 +20,6 @@ const createEmployee = async employeeBody => {
  * @returns {Promise<Employee>}
  */
 const getEmployeeByPositions = async positionArray => {
-    console.log('positionArray', positionArray);
     return Employee.find({ positionId: { $in: positionArray } }).select('-__v');
 };
 

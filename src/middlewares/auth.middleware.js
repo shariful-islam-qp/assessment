@@ -25,7 +25,6 @@ const protectRoute = catchAsync(async (req, res, next) => {
 
     // 2) token verification
     const decode = await promisify(jwt.verify)(token, config.JWT_SECRET);
-    console.log('decode', decode);
 
     // 3) Check if user still exist or deleted after token issued
     const decodedUser = await getUserById(decode?.sub);
