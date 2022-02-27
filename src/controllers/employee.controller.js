@@ -1,9 +1,11 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { employeeService } = require('../services');
+const logger = require('./../config/logger');
 
 const createEmployee = catchAsync(async (req, res) => {
     const employee = await employeeService.createEmployee(req.body);
+    logger.info('New employee created');
     res.status(httpStatus.CREATED).send(employee);
 });
 

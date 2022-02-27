@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const { authService, tokenService } = require('./../services');
+const logger = require('./../config/logger');
 
 const login = catchAsync(async (req, res) => {
     const { email, password } = req.body;
@@ -8,6 +9,7 @@ const login = catchAsync(async (req, res) => {
         password
     );
     const tokens = await tokenService.generateAuthTokens(user);
+    logger.info('token created successfully');
     res.send({
         user: {
             _id: user._id,
