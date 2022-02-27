@@ -8,7 +8,7 @@ const createEmployee = catchAsync(async (req, res) => {
 });
 
 const getEmployeeByPosition = catchAsync(async (req, res) => {
-    res.status(httpStatus.FOUND).send('route found');
+    res.status(httpStatus.OK).send('route found');
 });
 
 module.exports = {

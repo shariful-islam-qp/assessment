@@ -5,18 +5,9 @@ const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors');
 const routes = require('./routes');
-// const passport = require('passport');
-// const config = require('./config/config');
-// const { jwtStrategy } = require('./config/passport');
-// const { authLimiter } = require('./middlewares/rateLimiter');
 const ApiError = require('./utils/ApiError');
 
 const app = express();
-
-// if (config.env !== 'test') {
-//     app.use(morgan.successHandler);
-//     app.use(morgan.errorHandler);
-// }
 
 // set security HTTP headers
 app.use(helmet());
@@ -37,10 +28,6 @@ app.use(compression());
 // enable cors
 app.use(cors());
 app.options('*', cors());
-
-// jwt authentication
-// app.use(passport.initialize());
-// passport.use('jwt', jwtStrategy)
 
 app.use('/test', (req, res) => {
     res.status(200).json({
