@@ -18,14 +18,6 @@ const customFormat = format.combine(
 
 const logger = createLogger({
     format: customFormat,
-    // format: winston.format.combine(
-    //     enumerateErrorFormat(),
-    //     config.env === 'development'
-    //         ? winston.format.colorize()
-    //         : winston.format.uncolorize(),
-    //     winston.format.splat(),
-    //     winston.format.printf(({ level, message }) => `${level}: ${message}`)
-    // ),
     transports: [
         new transports.Console({
             stderrLevels: ['silly']

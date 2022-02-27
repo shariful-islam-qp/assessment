@@ -5,12 +5,17 @@ const config = require('./config/config');
 const logger = require('./config/logger');
 
 let server;
-mongoose.connect(config.DB_CONNECTION_STRING).then(() => {
-    logger.info('Connected to MongoDB');
-    server = app.listen(config.PORT, () => {
-        logger.info(`Listening to port ${config.PORT}`);
+mongoose
+    .connect(config.DB_CONNECTION_STRING)
+    .then(() => {
+        logger.info('Connected to MongoDB');
+        server = app.listen(config.PORT, () => {
+            logger.info(`Listening to port ${config.PORT}`);
+        });
+    })
+    .catch(err => {
+        logger.error(`${err.name} ${err.message}`);
     });
-});
 
 const exitHandler = () => {
     if (server) {
