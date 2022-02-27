@@ -5,7 +5,7 @@ const ApiError = require('../utils/ApiError');
 /**
  * Create a user
  * @param {Object} employeeBody
- * @returns {Promise<Position>}
+ * @returns {Promise<Employee>}
  */
 const createEmployee = async employeeBody => {
     if (await Employee.isEmailTaken(employeeBody.email)) {
@@ -14,4 +14,14 @@ const createEmployee = async employeeBody => {
     return Employee.create(employeeBody);
 };
 
-module.exports = { createEmployee };
+/**
+ * Create a user
+ * @param {Array} positionArray
+ * @returns {Promise<Employee>}
+ */
+const getEmployeeByPositions = async positionArray => {
+    console.log('positionArray', positionArray);
+    return Employee.find({ positionId: { $in: positionArray } }).select('-__v');
+};
+
+module.exports = { createEmployee, getEmployeeByPositions };

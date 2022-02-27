@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { employeeService } = require('../services');
+const { employeeService, positionService } = require('../services');
 const logger = require('./../config/logger');
 
 const createEmployee = catchAsync(async (req, res) => {
@@ -10,7 +10,19 @@ const createEmployee = catchAsync(async (req, res) => {
 });
 
 const getEmployeeByPosition = catchAsync(async (req, res) => {
-    res.status(httpStatus.OK).send('route found');
+    const positionId = req.params.positionId;
+    const docs = await positionService.getAllPositionByRoot(positionId);
+    const positionList = docs[0].result;
+
+    if (positionList && positionList.length > 0) {
+        const employees = await employeeService.getEmployeeByPositions(
+            positionList
+        );
+        res.status(httpStatus.OK).send(employees);
+    } else
+        res.status(httpStatus.OK).send(
+            `No Position found under '${positionId}' id`
+        );
 });
 
 module.exports = {

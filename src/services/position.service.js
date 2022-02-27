@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Position } = require('../models');
 const ApiError = require('../utils/ApiError');
+const mongoose = require('mongoose');
 
 /**
  * Create a user
@@ -73,8 +74,30 @@ const generateHierarchy = async list => {
     });
 };
 
+/**
+ * Create a user
+ * @param {Object} rootId
+ * @returns {Promise<Position>}
+ */
+const getAllPositionByRoot = async rootId => {
+    return Position.aggregate([
+        { $match: { _id: mongoose.Types.ObjectId(rootId) } },
+        {
+            $graphLookup: {
+                from: 'positions',
+                startWith: '$_id',
+                connectFromField: '_id',
+                connectToField: 'parentId',
+                as: 'children'
+            }
+        },
+        { $project: { _id: 0, result: '$children._id' } }
+    ]);
+};
+
 module.exports = {
     createPosition,
     getAllPosition,
-    generateHierarchy
+    generateHierarchy,
+    getAllPositionByRoot
 };
