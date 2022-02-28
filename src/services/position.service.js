@@ -31,47 +31,41 @@ const getAllPosition = async () => {
  */
 const generateHierarchy = async list => {
     // generate hierarchy
-    return new Promise((resolve, reject) => {
-        if (!list || !Array.isArray(list))
-            reject({
-                name: 'Argument type mismatch.',
-                message: 'provided value should be an array.'
-            });
+    if (!list || !Array.isArray(list))
+        reject({
+            name: 'Argument type mismatch.',
+            message: 'provided value should be an array.'
+        });
 
-        var map = {},
-            node,
-            roots = [],
-            i;
-        mappedArr = [];
+    var map = {},
+        node,
+        roots = [],
+        i;
+    mappedArr = [];
 
-        for (i = 0; i < list.length; i += 1) {
-            map[list[i]._id] = i; // initialize the map
+    for (i = 0; i < list.length; i += 1) {
+        map[list[i]._id] = i; // initialize the map
 
-            mappedArr[i] = {
-                id: list[i]._id,
-                title: list[i].title,
-                parentId: list[i]?.parentId,
-                child: []
-            }; // the extracted id as key, and the item as value
+        mappedArr[i] = {
+            id: list[i]._id,
+            title: list[i].title,
+            parentId: list[i]?.parentId,
+            child: []
+        }; // the extracted id as key, and the item as value
+    }
+
+    for (i = 0; i < mappedArr.length; i += 1) {
+        node = mappedArr[i];
+        if (!node.parentId) {
+            roots.push(node);
+        } else {
+            // if you have dangling branches check that map[node.parentId] exists
+            mappedArr[map[node.parentId]].child.push(node);
         }
+    }
 
-        for (i = 0; i < mappedArr.length; i += 1) {
-            node = mappedArr[i];
-            if (!node.parentId) {
-                roots.push(node);
-            } else {
-                // if you have dangling branches check that map[node.parentId] exists
-                mappedArr[map[node.parentId]].child.push(node);
-            }
-        }
-
-        if (roots.length > 0) resolve(roots);
-        else
-            reject({
-                name: 'Not found error!',
-                message: 'No position created yet.'
-            });
-    });
+    if (roots.length > 0) return roots;
+    else return [];
 };
 
 /**
