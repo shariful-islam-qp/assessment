@@ -19,3 +19,4 @@
 -   I tried to make project structure as much testable as possible.
 -   Tried to maintain **SOLID Principles** to make ensure functions are doing single thing and **Dependency Inversion Principle** to solve dependency issue.
 -   For load test I used **Apache benchmark**
+-   No UI for this project. 
