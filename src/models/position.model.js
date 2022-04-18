@@ -1,3 +1,4 @@
+const mongoosastic = require('mongoosastic');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -6,7 +7,8 @@ const positionSchema = Schema(
         title: {
             type: String,
             trim: true,
-            required: [true, 'Position title is required']
+            required: [true, 'Position title is required'],
+            es_indexed: true
         },
         parentId: {
             type: Schema.Types.ObjectId,
@@ -15,6 +17,8 @@ const positionSchema = Schema(
     },
     { timestamps: true }
 );
+
+positionSchema.plugin(mongoosastic);
 
 /**
  * Check if email is taken
@@ -27,4 +31,10 @@ positionSchema.statics.isTitleTaken = async function (title, excludeTitle) {
     return !!position;
 };
 
-module.exports = mongoose.model('Position', positionSchema);
+const Position = mongoose.model('Position', positionSchema);
+
+Position.createMapping((err, mapping) => {
+    console.log('mapping created');
+});
+
+module.exports = Position;

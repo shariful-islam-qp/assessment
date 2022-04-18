@@ -14,4 +14,6 @@ router
     )
     .get(positionController.getPositions);
 
+router.route('/search/:searchBy').post(positionController.searchPosition);
+
 module.exports = router;

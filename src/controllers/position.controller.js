@@ -16,7 +16,16 @@ const getPositions = catchAsync(async (req, res) => {
     res.send(hierarchy);
 });
 
+// controller to search in position
+const searchPosition = catchAsync(async (req, res) => {
+    const { searchBy } = req.params;
+    const positions = await positionService.searchPosition(searchBy);
+    console.log('positions', positions);
+    res.send(positions);
+});
+
 module.exports = {
     createPosition,
-    getPositions
+    getPositions,
+    searchPosition
 };

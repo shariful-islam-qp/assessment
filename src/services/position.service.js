@@ -3,6 +3,8 @@ const { Position } = require('../models');
 const ApiError = require('../utils/ApiError');
 const mongoose = require('mongoose');
 
+// load es client
+// const esClient = require('./../config/elasticSearch');
 /**
  * Create a user
  * @param {Object} positionBody
@@ -12,7 +14,24 @@ const createPosition = async positionBody => {
     if (await Position.isTitleTaken(positionBody.title)) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Title already taken');
     }
-    return Position.create(positionBody);
+
+    const newPosition = new Position(positionBody);
+    // newPosition.save();
+
+    newPosition.save(err => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Position added in both the databases');
+    });
+
+    newPosition.on('es-indexed', (err, result) => {
+        console.log('indexed to elastic search');
+    });
+
+    return newPosition;
+
+    // return Position.create(positionBody);
 };
 
 /**
@@ -89,9 +108,24 @@ const getAllPositionByRoot = async rootId => {
     ]);
 };
 
+const searchPosition = async searchBy => {
+    searchBy = `${searchBy}.+`;
+    console.log({ searchBy });
+    return Position.esSearch({
+        // body: {
+        query: {
+            regexp: {
+                title: searchBy
+            }
+        }
+        // }
+    });
+};
+
 module.exports = {
     createPosition,
     getAllPosition,
     generateHierarchy,
-    getAllPositionByRoot
+    getAllPositionByRoot,
+    searchPosition
 };
